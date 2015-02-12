@@ -121,13 +121,14 @@ public class ChooseCalendar extends ActionBarActivity {
                 cal.addView(calName);
 
                 final String editID = l_calId;
+                final int oColor = 0xff000000 + Integer.parseInt(l_calClr);
                 calName.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         //editID
                         v.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
                         Intent intChangeColor = new Intent(v.getContext(), ChangeColor.class);
                         intChangeColor.putExtra("calID", editID);
-                        intChangeColor.putExtra("oColor", calClr.getPaint().getColor());
+                        intChangeColor.putExtra("oColor", oColor);
                         startActivity(intChangeColor);
                         v.setBackgroundColor(Color.WHITE);
                     }

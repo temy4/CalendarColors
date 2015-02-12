@@ -10,4 +10,6 @@
     <string name="txtGreen">Зеленый</string>
     <string name="txtBlue">Синий</string>
     <string name="txtAlpha">Прозрачность</string>
+    <string name="btnSave">ГОТОВО</string>
+    <string name="btnCancel">ОТМЕНА</string>
 </resources>

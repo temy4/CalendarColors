@@ -10,5 +10,7 @@
     <string name="txtGreen">Green</string>
     <string name="txtBlue">Blue</string>
     <string name="txtAlpha">Alpha</string>
+    <string name="btnSave">DONE</string>
+    <string name="btnCancel">CANCEL</string>
 
 </resources>

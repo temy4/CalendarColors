@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calendar Colors</string>
+    <string name="title_activity_choose_calendar">Calendar Colors</string>
+    <string name="action_settings">Настройки</string>
+    <string name="cal_nf">Календари не найдены</string>
+    <string name="title_activity_change_color">Изменить цвет</string>
+    <string name="txtRed">Красный</string>
+    <string name="txtGreen">Зеленый</string>
+    <string name="txtBlue">Синий</string>
+    <string name="txtAlpha">Прозрачность</string>
+</resources>

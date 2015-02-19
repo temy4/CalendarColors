@@ -4,6 +4,7 @@
     <string name="app_name">Calendar Colors</string>
     <string name="title_activity_choose_calendar">Calendar Colors</string>
     <string name="action_settings">Настройки</string>
+    <string name="action_about">О программе</string>
     <string name="cal_nf">Календари не найдены</string>
     <string name="title_activity_change_color">Изменить цвет</string>
     <string name="txtRed">Красный</string>
@@ -12,4 +13,8 @@
     <string name="txtAlpha">Прозрачность</string>
     <string name="btnSave">ГОТОВО</string>
     <string name="btnCancel">ОТМЕНА</string>
+    <string name="title_activity_about">О программе</string>
+    <string name="about_text">
+        Разработчик: Артём Савенков
+    </string>
 </resources>

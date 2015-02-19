@@ -49,6 +49,11 @@ public class ChooseCalendar extends ActionBarActivity {
         listUserCalendars();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        listUserCalendars();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,6 +69,17 @@ public class ChooseCalendar extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        switch (id){
+            case R.id.action_about:
+                View v = this.findViewById(android.R.id.content);
+                Intent intAbout = new Intent(v.getContext(), About.class);
+                startActivity(intAbout);
+                break;
+            case R.id.action_settings:
+
+                break;
+        }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -74,6 +90,7 @@ public class ChooseCalendar extends ActionBarActivity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void listUserCalendars() {
+        calendars.removeAllViewsInLayout();
         String[] l_projection = new String[]{"_id", "calendar_displayName", "calendar_color"};
         Uri l_calendars;
         ContentResolver cr = getContentResolver();
@@ -120,7 +137,7 @@ public class ChooseCalendar extends ActionBarActivity {
                 calName.setClickable(true);
                 cal.addView(calName);
 
-                final String editID = l_calId;
+                final int editID = Integer.valueOf(l_calId);
                 final int oColor = 0xff000000 + Integer.parseInt(l_calClr);
                 calName.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

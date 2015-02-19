@@ -263,7 +263,7 @@ public class ChangeColor extends ActionBarActivity {
 
         Intent intent = getIntent();
         int oColor = intent.getIntExtra("oColor", 0);
-        final int calID = intent.getIntExtra("calID", 0);
+        final int calID = intent.getIntExtra("calID", 1);
 
         oldColor.setBackgroundColor(oColor);
         newColor.setBackgroundColor(oColor);
@@ -281,9 +281,25 @@ public class ChangeColor extends ActionBarActivity {
 
         btnSave.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                cal.
-                cal.put
+                ContentValues values = new ContentValues();
+                Uri l_calendars;
+                ContentResolver cr = getContentResolver();
+                String[] l_projection = new String[]{"_id", "calendar_displayName", "calendar_color"};
+
+                if (Build.VERSION.SDK_INT >= 8 ) {
+                    l_calendars = Uri.parse("content://com.android.calendar/calendars");
+                } else {
+                    l_calendars = Uri.parse("content://calendar/calendars");
+                }
+                values.put(
+                        CalendarContract.Calendars.CALENDAR_COLOR,
+                        Color.argb(255 - sbAlpha.getProgress(),
+                                sbRed.getProgress(),
+                                sbGreen.getProgress(),
+                                sbBlue.getProgress()
+                        )
+                );
+                cr.update(l_calendars, values, "_id=" + calID, l_projection);
 
                 finish();
             }

@@ -34,6 +34,9 @@ public class ChangeColor extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_color);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final EditText hexColor = (EditText) findViewById(R.id.hexColor);
         final TextView oldColor = (TextView) findViewById(R.id.oldColor);
         final TextView newColor = (TextView) findViewById(R.id.newColor);

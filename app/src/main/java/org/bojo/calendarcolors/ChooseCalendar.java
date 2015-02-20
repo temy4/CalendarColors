@@ -2,26 +2,17 @@ package org.bojo.calendarcolors;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.graphics.drawable.shapes.Shape;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridLayout;
+import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -31,13 +22,14 @@ import android.graphics.Typeface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.widget.Toast;
 
 public class ChooseCalendar extends ActionBarActivity {
 
     TableLayout calendars;
     TableRow cal;
     TextView calClr,calName,calNF, line;
+
+    MenuItem cbShowAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +38,22 @@ public class ChooseCalendar extends ActionBarActivity {
 
         calendars = (TableLayout) findViewById(R.id.calendars);
         calendars.setBackgroundColor(Color.WHITE);
-        listUserCalendars();
+
+//        listUserCalendars(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        listUserCalendars();
+        listUserCalendars(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_choose_calendar, menu);
+//        cbShowAll = menu.findItem(R.id.all_calendars);
+
         return true;
     }
 
@@ -75,8 +70,9 @@ public class ChooseCalendar extends ActionBarActivity {
                 Intent intAbout = new Intent(v.getContext(), About.class);
                 startActivity(intAbout);
                 break;
-            case R.id.action_settings:
-
+            case R.id.all_calendars:
+                if (item.isChecked()) item.setChecked(false);
+                else item.setChecked(true);
                 break;
         }
 
@@ -89,8 +85,16 @@ public class ChooseCalendar extends ActionBarActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void listUserCalendars() {
+    public void listUserCalendars(boolean showAll) {
         calendars.removeAllViewsInLayout();
+
+        String condition = null;
+        if(showAll) {
+            if (!cbShowAll.isChecked()) {
+                condition = "selected=1";
+            }
+        }
+
         String[] l_projection = new String[]{"_id", "calendar_displayName", "calendar_color"};
         Uri l_calendars;
         ContentResolver cr = getContentResolver();
@@ -100,7 +104,7 @@ public class ChooseCalendar extends ActionBarActivity {
         } else {
             l_calendars = Uri.parse("content://calendar/calendars");
         }
-        Cursor l_managedCursor = cr.query(l_calendars, null, null, null, null);    //all calendars
+        Cursor l_managedCursor = cr.query(l_calendars, null, condition, null, null);    //all calendars
         //Cursor l_managedCursor = cr.query(l_calendars, l_projection, "_id=0", null, null);   //active calendars
 
         if (l_managedCursor.moveToFirst()) {

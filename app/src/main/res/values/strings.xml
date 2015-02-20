@@ -15,8 +15,6 @@
     <string name="btnCancel">CANCEL</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_about">About</string>
-    <string name="about_text">
-        Credits Artem S. Savenkov
-    </string>
-
+    <string name="about_text">        Credits Artem S. Savenkov</string>
+    <string name="show_all">Show hidden</string>
 </resources>

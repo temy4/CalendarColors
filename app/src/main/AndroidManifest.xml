@@ -22,18 +22,16 @@
         <activity
             android:name=".ChangeColor"
             android:label="@string/title_activity_change_color" >
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
-        <activity
-            android:name=".Settings"
-            android:label="@string/title_activity_settings" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChooseCalendar" />
         </activity>
         <activity
             android:name=".About"
             android:label="@string/title_activity_about" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChooseCalendar" />
         </activity>
     </application>
 

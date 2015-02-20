@@ -15,6 +15,7 @@
     <string name="btnCancel">ОТМЕНА</string>
     <string name="title_activity_about">О программе</string>
     <string name="about_text">
-        Разработчик: Артём Савенков
+        Автор: Артём Савенков
     </string>
+    <string name="show_all">Показать скрытые</string>
 </resources>

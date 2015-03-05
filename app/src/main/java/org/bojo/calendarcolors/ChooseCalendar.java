@@ -1,18 +1,13 @@
 package org.bojo.calendarcolors;
 
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -29,8 +24,6 @@ public class ChooseCalendar extends ActionBarActivity {
     TableRow cal;
     TextView calClr,calName,calNF, line;
 
-    MenuItem cbShowAll;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,20 +32,13 @@ public class ChooseCalendar extends ActionBarActivity {
         calendars = (TableLayout) findViewById(R.id.calendars);
         calendars.setBackgroundColor(Color.WHITE);
 
-//        listUserCalendars(false);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        listUserCalendars(true);
+        listUserCalendars();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_choose_calendar, menu);
-//        cbShowAll = menu.findItem(R.id.all_calendars);
 
         return true;
     }
@@ -70,44 +56,31 @@ public class ChooseCalendar extends ActionBarActivity {
                 Intent intAbout = new Intent(v.getContext(), About.class);
                 startActivity(intAbout);
                 break;
-            case R.id.all_calendars:
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
-                break;
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void listUserCalendars(boolean showAll) {
-        calendars.removeAllViewsInLayout();
-
-        String condition = null;
-        if(showAll) {
-            if (!cbShowAll.isChecked()) {
-                condition = "selected=1";
-            }
-        }
-
-        String[] l_projection = new String[]{"_id", "calendar_displayName", "calendar_color"};
-        Uri l_calendars;
-        ContentResolver cr = getContentResolver();
-
-        if (Build.VERSION.SDK_INT >= 8 ) {
-            l_calendars = Uri.parse("content://com.android.calendar/calendars");
-        } else {
-            l_calendars = Uri.parse("content://calendar/calendars");
-        }
-        Cursor l_managedCursor = cr.query(l_calendars, null, condition, null, null);    //all calendars
-        //Cursor l_managedCursor = cr.query(l_calendars, l_projection, "_id=0", null, null);   //active calendars
-
+    private void printCalendars(Cursor l_managedCursor, String[] l_projection, int titleString){
         if (l_managedCursor.moveToFirst()) {
+
+            cal = new TableRow(this);
+            TextView delimiter = new TextView(this);
+            delimiter.setText(titleString);
+            delimiter.setTextSize(15);
+
+            calClr = new TextView(this);
+            cal.addView(calClr);
+
+            cal.addView(delimiter);
+            line = new TextView(this);
+            line.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 1));
+            line.setBackgroundColor(Color.rgb(240, 240, 240));
+
+            // Add the TableRow to the TableLayout
+            calendars.addView(cal);
+            calendars.addView(line);
+
             String l_calId;
             String l_calName;
             String l_calClr;
@@ -166,7 +139,30 @@ public class ChooseCalendar extends ActionBarActivity {
                 calendars.addView(line);
             } while (l_managedCursor.moveToNext());
         }
-        else{
+    }
+
+    public void listUserCalendars() {
+        calendars.removeAllViewsInLayout();
+
+        String[] l_projection = new String[]{"_id", "calendar_displayName", "calendar_color"};
+        Uri l_calendars;
+        ContentResolver cr = getContentResolver();
+
+        if (Build.VERSION.SDK_INT >= 8 ) {
+            l_calendars = Uri.parse("content://com.android.calendar/calendars");
+        } else {
+            l_calendars = Uri.parse("content://calendar/calendars");
+        }
+        Cursor c_activeCalendars = cr.query(l_calendars, l_projection, "visible=1", null, null);    //all calendars
+        Cursor c_inActiveCalendars = cr.query(l_calendars, l_projection, "visible=0", null, null);    //all calendars
+
+        if (c_activeCalendars.getCount() > 0){
+            printCalendars(c_activeCalendars, l_projection, R.string.active);
+        }
+        if (c_inActiveCalendars.getCount() > 0){
+            printCalendars(c_inActiveCalendars, l_projection, R.string.inactive);
+        }
+        if (c_activeCalendars.getCount() == 0 && c_inActiveCalendars.getCount() == 0){
             calNF = new TextView(this);
             calNF.setText(R.string.cal_nf);
             calNF.setTypeface(null, Typeface.ITALIC);

@@ -5,6 +5,8 @@
     <string name="title_activity_choose_calendar">Calendar Colors</string>
     <string name="action_settings">Настройки</string>
     <string name="action_about">О программе</string>
+    <string name="active">Активные</string>
+    <string name="inactive">Неактивные</string>
     <string name="cal_nf">Календари не найдены</string>
     <string name="title_activity_change_color">Изменить цвет</string>
     <string name="txtRed">Красный</string>

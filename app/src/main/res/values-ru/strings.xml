@@ -20,4 +20,5 @@
         Автор: Артём Савенков
     </string>
     <string name="show_all">Показать скрытые</string>
+    <string name="color_disclaimer">Tap on color to open color picker dialog</string>
 </resources>

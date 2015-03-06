@@ -19,4 +19,9 @@
     <string name="title_activity_about">About</string>
     <string name="about_text">        Credits Artem S. Savenkov</string>
     <string name="show_all">Show hidden</string>
+    <string name="settings_bg_color_confirm">Confirm</string>
+    <string name="settings_default_color_confirm">Confirm default</string>
+    <string name="settings_bg_color_dialog">Choose a color</string>
+    <string name="choose">Choose</string>
+    <string name="color_disclaimer">Tap on color to open color picker dialog</string>
 </resources>

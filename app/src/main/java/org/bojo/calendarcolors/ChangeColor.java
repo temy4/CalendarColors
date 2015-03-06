@@ -2,6 +2,7 @@ package org.bojo.calendarcolors;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -22,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import org.bojo.calendarcolors.ColorPickerDialog;
 
 import java.util.Calendar;
 
@@ -37,19 +40,16 @@ public class ChangeColor extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final EditText hexColor = (EditText) findViewById(R.id.hexColor);
         final TextView oldColor = (TextView) findViewById(R.id.oldColor);
         final TextView newColor = (TextView) findViewById(R.id.newColor);
 
         final SeekBar sbRed = (SeekBar) findViewById(R.id.sbRed);
         final SeekBar sbGreen = (SeekBar) findViewById(R.id.sbGreen);
         final SeekBar sbBlue = (SeekBar) findViewById(R.id.sbBlue);
-        final SeekBar sbAlpha = (SeekBar) findViewById(R.id.sbAlpha);
 
         final EditText numRed = (EditText) findViewById(R.id.numRed);
         final EditText numGreen = (EditText) findViewById(R.id.numGreen);
         final EditText numBlue = (EditText) findViewById(R.id.numBlue);
-        final EditText numAlpha = (EditText) findViewById(R.id.numAlpha);
 
         final Button btnSave = (Button) findViewById(R.id.btnSave);
         final Button btnCancel = (Button) findViewById(R.id.btnCancel);
@@ -60,10 +60,6 @@ public class ChangeColor extends ActionBarActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
                     sbRed.setProgress(Integer.parseInt(s.toString()));
                 }
                 catch (Exception ex) {}
@@ -76,10 +72,6 @@ public class ChangeColor extends ActionBarActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
                     sbGreen.setProgress(Integer.parseInt(s.toString()));
                 }
                 catch (Exception ex) {}
@@ -92,63 +84,9 @@ public class ChangeColor extends ActionBarActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
                     sbBlue.setProgress(Integer.parseInt(s.toString()));
                 }
                 catch (Exception ex) {}
-            }
-        });
-
-        numAlpha.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
-                    sbAlpha.setProgress(Integer.parseInt(s.toString()));
-                }
-                catch (Exception ex) {}
-            }
-        });
-
-        hexColor.addTextChangedListener(new TextWatcher() {
-            boolean running = false;
-
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if(!running){
-//                    running = true;
-//                    try {
-//                        ColorDrawable cd = new ColorDrawable();
-//                        cd.setColor(Color.parseColor(s.toString()));
-//                        int clr = cd.getColor();
-//                        int nAlpha = cd.getAlpha() - 255;
-//                        int nRed = Color.red(clr);
-//                        int nGreen = Color.green(clr);
-//                        int nBlue = Color.blue(clr);
-//
-////                    sbRed.setProgress(nRed);
-////                    sbGreen.setProgress(nGreen);
-////                    sbBlue.setProgress(nBlue);
-////                    sbAlpha.setProgress(nAlpha);
-//
-//                        numRed.setText(String.valueOf(nRed));
-//                        numGreen.setText(String.valueOf(nGreen));
-//                        numBlue.setText(String.valueOf(nBlue));
-//                        numAlpha.setText(String.valueOf(nAlpha));
-//                    }
-//                    catch (Exception ex) {}
-//                    running = false;
-//                }
             }
         });
 
@@ -167,14 +105,10 @@ public class ChangeColor extends ActionBarActivity {
             public void onProgressChanged(SeekBar sbRed, int progress,boolean fromUser) {
                 if (fromUser) {
                     numRed.setText(String.valueOf(sbRed.getProgress()));
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
                 }
                 newColor.setBackgroundColor(
                         Color.argb(
-                                255 - sbAlpha.getProgress(), progress,
+                                255, progress,
                                 sbGreen.getProgress(), sbBlue.getProgress()
                         )
                 );
@@ -196,14 +130,10 @@ public class ChangeColor extends ActionBarActivity {
             public void onProgressChanged(SeekBar sbGreen, int progress,boolean fromUser) {
                 if (fromUser) {
                     numGreen.setText(String.valueOf(sbGreen.getProgress()));
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
                 }
                 newColor.setBackgroundColor(
                         Color.argb(
-                                255 - sbAlpha.getProgress(), sbRed.getProgress(),
+                                255, sbRed.getProgress(),
                                 progress, sbBlue.getProgress()
                         )
                 );
@@ -225,40 +155,11 @@ public class ChangeColor extends ActionBarActivity {
             public void onProgressChanged(SeekBar sbBlue, int progress,boolean fromUser) {
                 if (fromUser) {
                     numBlue.setText(String.valueOf(sbBlue.getProgress()));
-                    hexColor.setText(
-                            String.format("#%02x%02x%02x",
-                            sbRed.getProgress(), sbGreen.getProgress(), sbBlue.getProgress())
-                    );
                 }
                 newColor.setBackgroundColor(
                         Color.argb(
-                                255 - sbAlpha.getProgress(), sbRed.getProgress(),
+                                255, sbRed.getProgress(),
                                 sbGreen.getProgress(), progress
-                        )
-                );
-            }
-        });
-
-        sbAlpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(SeekBar sbAlpha) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar sbAlpha) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar sbAlpha, int progress,boolean fromUser) {
-                if (fromUser) {
-                    numAlpha.setText(String.valueOf(sbAlpha.getProgress()));
-                }
-                newColor.setBackgroundColor(
-                        Color.argb(
-                                255 - progress, sbRed.getProgress(),
-                                sbGreen.getProgress(), sbBlue.getProgress()
                         )
                 );
             }
@@ -272,15 +173,43 @@ public class ChangeColor extends ActionBarActivity {
         newColor.setBackgroundColor(oColor);
 
         ColorDrawable cd = (ColorDrawable) oldColor.getBackground();
-        int color = cd.getColor();
-        int oAlpha = cd.getAlpha() - 254;
+        final int color = cd.getColor();
         int oRed = Color.red(color);
         int oGreen = Color.green(color);
         int oBlue = Color.blue(color);
         numRed.setText(String.valueOf(oRed));
         numGreen.setText(String.valueOf(oGreen));
         numBlue.setText(String.valueOf(oBlue));
-        numAlpha.setText(String.valueOf(oAlpha));
+
+        ColorDrawable cdn = (ColorDrawable) newColor.getBackground();
+        final int colorn = cdn.getColor();
+
+        newColor.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Context context = getApplicationContext();
+                CharSequence text = "Hello toast!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                ColorPickerDialog.OnColorChangedListener getColorFromPicker = new ColorPickerDialog.OnColorChangedListener() {
+                    public void colorChanged(String key, int color) {
+                        Context context = getApplicationContext();
+                        CharSequence text = "Hello toast!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                };
+//                Context c, OnColorChangedListener l, int color,int defaultColor)
+                 new ColorPickerDialog(context, getColorFromPicker, "color", colorn, color).show();
+                final ColorPickerDialog colorDialog = new ColorPickerDialog(this, initialValue);
+
+                colorDialog.setAlphaSliderVisible(true);
+                colorDialog.setTitle("Pick a Color!");
+            }
+        });
 
         btnSave.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
@@ -296,7 +225,7 @@ public class ChangeColor extends ActionBarActivity {
                 }
                 values.put(
                         CalendarContract.Calendars.CALENDAR_COLOR,
-                        Color.argb(255 - sbAlpha.getProgress(),
+                        Color.argb(255,
                                 sbRed.getProgress(),
                                 sbGreen.getProgress(),
                                 sbBlue.getProgress()

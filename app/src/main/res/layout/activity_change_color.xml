@@ -111,40 +111,6 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1"
-        android:layout_marginBottom="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txtAlpha"
-            android:id="@+id/textAlpha"
-            android:minWidth="100dp" />
-
-        <SeekBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/sbAlpha"
-            android:layout_weight="0.97"
-            android:max="255" />
-
-        <EditText
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/numAlpha"
-            android:text="0"
-            android:textAlignment="center"
-            android:maxLength="3"
-            android:numeric="integer" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:weightSum="1">
 
@@ -153,7 +119,13 @@
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/oldColor"
-            android:minWidth="105dp" />
+            android:minWidth="160dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView3"
+            android:src="@drawable/arrow_right_bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -161,18 +133,21 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/newColor"
             android:layout_weight="0.17"
-            android:minWidth="105dp" />
+            android:minWidth="160dp" />
 
-        <EditText
-            android:layout_width="137dp"
-            android:layout_height="match_parent"
-            android:id="@+id/hexColor"
-            android:maxLength="7"
-            android:enabled="true"
-            android:editable="false"
-            android:lines="1"
-            android:text="#000000"
-            android:textSize="28dp" />
+        Button
+            android:layout_width="39dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:background="@drawable/eyedropper"
+            android:layout_weight="0.32"
+            android:textColor="#ffffff"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_row="1"
+            android:layout_column="11"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            />
 
     </LinearLayout>
 
@@ -187,9 +162,9 @@
             android:text="@string/btnCancel"
             style="?android:attr/borderlessButtonStyle"
             android:layout_row="1"
-            android:layout_column="10"
-            android:paddingRight="30dp"
-            android:id="@+id/btnCancel" />
+            android:id="@+id/btnCancel"
+            android:layout_marginRight="10dp"
+            android:layout_column="10" />
 
         <Button
             android:layout_width="wrap_content"

@@ -18,8 +18,8 @@
         android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:id="@+id/imageView"
         android:layout_alignBottom="@+id/textView"
         android:layout_centerHorizontal="true"

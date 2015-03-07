@@ -18,6 +18,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 
+import static org.bojo.calendarcolors.R.color.primaryColor;
+
 public class ChooseCalendar extends ActionBarActivity {
 
     TableLayout calendars;
@@ -69,23 +71,22 @@ public class ChooseCalendar extends ActionBarActivity {
 
     private void printCalendars(Cursor l_managedCursor, String[] l_projection, int titleString){
         if (l_managedCursor.moveToFirst()) {
-
+            LayoutParams lp = new LayoutParams();
             cal = new TableRow(this);
             TextView delimiter = new TextView(this);
             delimiter.setText(titleString);
-            delimiter.setTextSize(15);
+            delimiter.setTextColor(Color.parseColor("#448AFF"));
+            delimiter.setTextSize(20);
+            lp.setMargins(0,10,0,10);
+            delimiter.setLayoutParams(lp);
 
             calClr = new TextView(this);
             cal.addView(calClr);
 
             cal.addView(delimiter);
-            line = new TextView(this);
-            line.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 1));
-            line.setBackgroundColor(Color.rgb(240, 240, 240));
 
             // Add the TableRow to the TableLayout
             calendars.addView(cal);
-            calendars.addView(line);
 
             String l_calId;
             String l_calName;
@@ -93,11 +94,11 @@ public class ChooseCalendar extends ActionBarActivity {
             int l_idCol = l_managedCursor.getColumnIndex(l_projection[0]);
             int l_nameCol = l_managedCursor.getColumnIndex(l_projection[1]);
             int l_clrCol = l_managedCursor.getColumnIndex(l_projection[2]);
+            int i = 0;
             do {
                 l_calName = l_managedCursor.getString(l_nameCol);
                 l_calId = l_managedCursor.getString(l_idCol);
                 l_calClr = l_managedCursor.getString(l_clrCol);
-
                 cal = new TableRow(this);
                 cal.setLayoutParams(new LayoutParams(
                         LayoutParams.MATCH_PARENT,
@@ -106,22 +107,31 @@ public class ChooseCalendar extends ActionBarActivity {
 
                 calClr = new TextView(this);
                 calClr.setWidth(15);
-                calClr.setHeight(110);
+//                calClr.setHeight(110);
                 calClr.setBackgroundColor(0xff000000 + Integer.parseInt(l_calClr));
-                calClr.setPadding(30,30,30,30);
+                calClr.setPadding(0,30,0,30);
                 cal.addView(calClr);
 
                 calName = new TextView(this);
-                calName.setHeight(110);
+//                calName.setHeight(110);
                 calName.setText(l_calName);
                 calName.setTextColor(Color.BLACK);
                 calName.setTextSize(20);
                 calName.setPadding(20, 20, 20, 30);
                 calName.setClickable(true);
+                calName.setEllipsize(null);
+                calName.setSingleLine(true);
+                if(i%2 > 0) {
+                    calName.setBackgroundColor(Color.rgb(255, 255, 255));
+                }
+                else{
+                    calName.setBackgroundColor(Color.rgb(245, 245, 245));
+                }
                 cal.addView(calName);
 
                 final int editID = Integer.valueOf(l_calId);
                 final int oColor = 0xff000000 + Integer.parseInt(l_calClr);
+                final String calendarName = l_calName;
                 calName.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         //editID
@@ -129,6 +139,7 @@ public class ChooseCalendar extends ActionBarActivity {
                         Intent intChangeColor = new Intent(v.getContext(), ChangeColor.class);
                         intChangeColor.putExtra("calID", editID);
                         intChangeColor.putExtra("oColor", oColor);
+                        intChangeColor.putExtra("calName", calendarName);
                         startActivity(intChangeColor);
                         v.setBackgroundColor(Color.WHITE);
                     }
@@ -139,10 +150,12 @@ public class ChooseCalendar extends ActionBarActivity {
                 line.setBackgroundColor(Color.rgb(200, 200, 200));
 
                 // Add the TableRow to the TableLayout
+//                calendars.addView(line);
                 calendars.addView(cal, new TableLayout.LayoutParams(
                         LayoutParams.FILL_PARENT,
                         LayoutParams.WRAP_CONTENT));
-                calendars.addView(line);
+//                calendars.addView(line);
+                i++;
             } while (l_managedCursor.moveToNext());
         }
     }

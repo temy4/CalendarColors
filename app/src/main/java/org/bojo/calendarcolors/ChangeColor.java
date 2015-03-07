@@ -2,13 +2,9 @@ package org.bojo.calendarcolors;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
@@ -24,9 +20,8 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.bojo.calendarcolors.ColorPickerDialog;
 
-import java.util.Calendar;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 
 public class ChangeColor extends ActionBarActivity {
@@ -42,6 +37,7 @@ public class ChangeColor extends ActionBarActivity {
 
         final TextView oldColor = (TextView) findViewById(R.id.oldColor);
         final TextView newColor = (TextView) findViewById(R.id.newColor);
+        final TextView calName  = (TextView) findViewById(R.id.calName);
 
         final SeekBar sbRed = (SeekBar) findViewById(R.id.sbRed);
         final SeekBar sbGreen = (SeekBar) findViewById(R.id.sbGreen);
@@ -168,6 +164,7 @@ public class ChangeColor extends ActionBarActivity {
         Intent intent = getIntent();
         int oColor = intent.getIntExtra("oColor", 0);
         final int calID = intent.getIntExtra("calID", 1);
+        final String calendarName = intent.getStringExtra("calName");
 
         oldColor.setBackgroundColor(oColor);
         newColor.setBackgroundColor(oColor);
@@ -180,34 +177,27 @@ public class ChangeColor extends ActionBarActivity {
         numRed.setText(String.valueOf(oRed));
         numGreen.setText(String.valueOf(oGreen));
         numBlue.setText(String.valueOf(oBlue));
-
-        ColorDrawable cdn = (ColorDrawable) newColor.getBackground();
-        final int colorn = cdn.getColor();
+        calName.setText(calendarName);
 
         newColor.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Context context = getApplicationContext();
-                CharSequence text = "Hello toast!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                ColorPickerDialog.OnColorChangedListener getColorFromPicker = new ColorPickerDialog.OnColorChangedListener() {
-                    public void colorChanged(String key, int color) {
-                        Context context = getApplicationContext();
-                        CharSequence text = "Hello toast!";
-                        int duration = Toast.LENGTH_SHORT;
-
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                AmbilWarnaDialog dialog = new AmbilWarnaDialog(ChangeColor.this, color, false, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                    @Override
+                    public void onOk(AmbilWarnaDialog dialog, int color) {
+                        newColor.setBackgroundColor(color);
+                        numRed.setText(String.valueOf(Color.red(color)));
+                        numGreen.setText(String.valueOf(Color.green(color)));
+                        numBlue.setText(String.valueOf(Color.blue(color)));
+//                        ChangeColor.this.color = color;
+//                        displayColor();
                     }
-                };
-//                Context c, OnColorChangedListener l, int color,int defaultColor)
-                 new ColorPickerDialog(context, getColorFromPicker, "color", colorn, color).show();
-                final ColorPickerDialog colorDialog = new ColorPickerDialog(this, initialValue);
 
-                colorDialog.setAlphaSliderVisible(true);
-                colorDialog.setTitle("Pick a Color!");
+                    @Override
+                    public void onCancel(AmbilWarnaDialog dialog) {
+
+                    }
+                });
+                dialog.show();
             }
         });
 
